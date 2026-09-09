@@ -754,3 +754,36 @@
     align-items: center;
     justify-content: center;
 }
+
+.dz-tab-glyph { display:inline-grid; width:2rem; height:2rem; margin-right:.6rem; place-items:center; color:#12c7b0; font-size:1.6rem; font-weight:800; }
+
+/* D-Zenith tab-shell fixes: keep navigation above the external Blockly layer
+   and make custom trader pages independently scrollable. */
+.main {
+    position: relative;
+    overflow: visible;
+}
+
+.main__container {
+    min-height: 0;
+}
+
+.main__container .dc-tabs__list {
+    position: relative;
+    z-index: 4;
+}
+
+.main__container .dc-tabs__content--main__tabs {
+    min-height: 0;
+    height: calc(100vh - 16.6rem);
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+    .main__container .dc-tabs__content--main__tabs {
+        height: calc(100vh - 12.6rem);
+    }
+}

@@ -1,22 +1,22 @@
 {
-    "brand_name": "YourBrand",
-    "brand_domain": "yourbrand.com",
+    "brand_name": "D-Zenith",
+    "brand_domain": "d-zenith.vercel.app",
     "brand_hostname": {
-        "staging": "staging.yourbrand.com/dashboard",
-        "production": "yourbrand.com/dashboard"
+        "staging": "staging.d-zenith.vercel.app/dashboard",
+        "production": "d-zenith.vercel.app/dashboard"
     },
-    "domain_name": "YourBrand.com",
+    "domain_name": "D-Zenith",
     "colors": {
-        "primary": "#3b82f6",
-        "secondary": "#64748b",
-        "tertiary": "#8b5cf6",
+        "primary": "#6d5ef5",
+        "secondary": "#12c7b0",
+        "tertiary": "#ffb547",
         "success": "#10b981",
         "danger": "#ef4444",
         "warning": "#f59e0b",
         "info": "#0ea5e9",
         "neutral": "#6b7280",
-        "black": "#0f172a",
-        "white": "#ffffff",
+        "black": "#0b1020",
+        "white": "#f8fafc",
         "grey": {
             "50": "#f8fafc",
             "100": "#f1f5f9",
@@ -24,10 +24,10 @@
             "300": "#cbd5e1",
             "400": "#94a3b8",
             "500": "#64748b",
-            "600": "#475569",
-            "700": "#334155",
-            "800": "#1e293b",
-            "900": "#0f172a"
+            "600": "#2b3a5d",
+            "700": "#1e2a48",
+            "800": "#121a31",
+            "900": "#0b1020"
         }
     },
     "typography": {
@@ -58,14 +58,14 @@
         "css_variable_prefix": "--brand"
     },
     "platform": {
-        "name": "Trading Bot",
+        "name": "D-Zenith Trading",
         "logo": {
             "type": "component",
             "component_name": "BrandLogo",
-            "alt_text": "Trading Bot",
+            "alt_text": "D-Zenith Trading",
             "link_url": "/",
             "show_text": false,
-            "text": "Trading Bot"
+            "text": "D-Zenith"
         },
         "footer": {
             "enable_language_settings": false,
@@ -73,10 +73,10 @@
         },
         "hostname": {
             "production": {
-                "com": "bot.yourbrand.com"
+                "com": "d-zenith.vercel.app"
             },
             "staging": {
-                "com": "staging-bot.yourbrand.com"
+                "com": "staging.d-zenith.vercel.app"
             }
         },
         "auth2_url": {

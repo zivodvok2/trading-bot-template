@@ -18,8 +18,8 @@ export const STAGING_DOMAINS = {
 
 // WebSocket server URLs
 export const WS_SERVERS = {
-    STAGING: `${brandConfig.platform.derivws.url.staging}options/ws/public`,
-    PRODUCTION: `${brandConfig.platform.derivws.url.production}options/ws/public`,
+    STAGING: `${brandConfig.platform.derivws.url.staging.replace(/^https?/, 'wss')}options/ws/public`,
+    PRODUCTION: `${brandConfig.platform.derivws.url.production.replace(/^https?/, 'wss')}options/ws/public`,
 } as const;
 
 // =============================================================================
@@ -36,7 +36,7 @@ export const isProduction = () => {
 export const isLocal = () => /localhost(:\d+)?$/i.test(window.location.hostname);
 
 const getDefaultServerURL = () => {
-    const isProductionEnv = isProduction();
+    const isProductionEnv = isProduction() || isLocal();
 
     try {
         return isProductionEnv ? WS_SERVERS.PRODUCTION : WS_SERVERS.STAGING;

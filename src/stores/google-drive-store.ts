@@ -85,6 +85,7 @@ export default class GoogleDriveStore {
     };
 
     initialise = () => {
+        if (!this.client_id || !this.api_key) return;
         gapi.load('client:picker', () => gapi.client.load(this.discovery_docs));
     };
 
@@ -95,6 +96,7 @@ export default class GoogleDriveStore {
     };
 
     initialiseClient = () => {
+        if (!this.client_id || !window.google?.accounts?.oauth2) return;
         this.client = google.accounts.oauth2.initTokenClient({
             client_id: this.client_id,
             scope: this.scope,
