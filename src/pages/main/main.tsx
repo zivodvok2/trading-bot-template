@@ -45,7 +45,7 @@ import './main.scss';
 
 const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
 const Tutorial = lazy(() => import('../tutorials'));
-const DZenithTools = lazy(() => import('../dzenith-tools'));
+import DZenithTools from '../dzenith-tools';
 
 const AppWrapper = observer(() => {
     const { connectionStatus } = useApiBase();
@@ -78,7 +78,7 @@ const AppWrapper = observer(() => {
     const { clear } = summary_card;
     const { DASHBOARD, BOT_BUILDER } = DBOT_TABS;
     const init_render = React.useRef(true);
-    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'market_analysis', 'manual_trader', 'ai_trader', 'free_bots', 'copy_trading', 'accumulators', 'competition'];
+    const hash = ['dashboard', 'bot_builder', 'chart', 'tutorial', 'market_analysis', 'analysis_tool', 'manual_trader', 'ai_trader', 'free_bots', 'copy_trading', 'accumulators', 'ultimate_bot', 'speed_bot', 'competition', 'ea_bots'];
     const { isDesktop } = useDevice();
     const location = useLocation();
     const navigate = useNavigate();
@@ -449,13 +449,17 @@ const AppWrapper = observer(() => {
                                     </Suspense>
                                 </div>
                             </div>
-                            <div label={<><span className='dz-tab-glyph'>⌁</span><span>Market Analysis</span></>} id='id-market-analysis'><Suspense fallback={<ChunkLoader message='Loading market analysis...' />}><DZenithTools variant='market_analysis' /></Suspense></div>
-                            <div label={<><span className='dz-tab-glyph'>↗</span><span>Manual Trader</span></>} id='id-manual-trader'><Suspense fallback={<ChunkLoader message='Loading manual trader...' />}><DZenithTools variant='manual_trader' /></Suspense></div>
-                            <div label={<><span className='dz-tab-glyph'>✦</span><span>AI Trader</span></>} id='id-ai-trader'><Suspense fallback={<ChunkLoader message='Loading AI trader...' />}><DZenithTools variant='ai_trader' /></Suspense></div>
-                            <div label={<><span className='dz-tab-glyph'>◈</span><span>Free Bots</span></>} id='id-free-bots'><Suspense fallback={<ChunkLoader message='Loading free bots...' />}><DZenithTools variant='free_bots' /></Suspense></div>
-                            <div label={<><span className='dz-tab-glyph'>◎</span><span>Copy Trading</span></>} id='id-copy-trading'><Suspense fallback={<ChunkLoader message='Loading copy trading...' />}><DZenithTools variant='copy_trading' /></Suspense></div>
-                            <div label={<><span className='dz-tab-glyph'>◇</span><span>Accumulators</span></>} id='id-accumulators'><Suspense fallback={<ChunkLoader message='Loading accumulators...' />}><DZenithTools variant='accumulators' /></Suspense></div>
-                            <div label={<><span className='dz-tab-glyph'>🏆</span><span>Competition</span></>} id='id-competition'><Suspense fallback={<ChunkLoader message='Loading competition...' />}><DZenithTools variant='competition' /></Suspense></div>
+                            <div label={<><span className='dz-tab-glyph'>⌁</span><span>Market Analysis</span></>} id='id-market-analysis'><DZenithTools variant='market_analysis' /></div>
+                            <div label={<><span className='dz-tab-glyph'>◌</span><span>Analysis Tool</span></>} id='id-analysis-tool'><DZenithTools variant='analysis_tool' /></div>
+                            <div label={<><span className='dz-tab-glyph'>↗</span><span>Manual Trader</span></>} id='id-manual-trader'><DZenithTools variant='manual_trader' /></div>
+                            <div label={<><span className='dz-tab-glyph'>✦</span><span>AI Trader</span></>} id='id-ai-trader'><DZenithTools variant='ai_trader' /></div>
+                            <div label={<><span className='dz-tab-glyph'>◈</span><span>Free Bots</span></>} id='id-free-bots'><DZenithTools variant='free_bots' /></div>
+                            <div label={<><span className='dz-tab-glyph'>◎</span><span>Copy Trading</span></>} id='id-copy-trading'><DZenithTools variant='copy_trading' /></div>
+                            <div label={<><span className='dz-tab-glyph'>◇</span><span>Accumulators</span></>} id='id-accumulators'><DZenithTools variant='accumulators' /></div>
+                            <div label={<><span className='dz-tab-glyph'>⚡</span><span>Ultimate Bot</span></>} id='id-ultimate-bot'><DZenithTools variant='ultimate_bot' /></div>
+                            <div label={<><span className='dz-tab-glyph'>↯</span><span>Speed Bot</span></>} id='id-speed-bot'><DZenithTools variant='speed_bot' /></div>
+                            <div label={<><span className='dz-tab-glyph'>🏆</span><span>Competition</span></>} id='id-competition'><DZenithTools variant='competition' /></div>
+                            <div label={<><span className='dz-tab-glyph'>⚙</span><span>EA Bots</span></>} id='id-ea-bots'><DZenithTools variant='ea_bots' /></div>
                         </Tabs>
                         {!isDesktop && right_tab_shadow && <span className='tabs-shadow tabs-shadow--right' />}{' '}
                     </div>
