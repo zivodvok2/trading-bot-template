@@ -345,7 +345,7 @@ const AppWrapper = observer(() => {
             if (el_id) {
                 const el_tab = document.getElementById(el_id);
                 setTimeout(() => {
-                    el_tab?.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+                    el_tab?.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
                 }, 10);
             }
         },

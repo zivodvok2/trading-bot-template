@@ -787,3 +787,11 @@
         height: calc(100vh - 12.6rem);
     }
 }
+
+/* The shared tab component uses a flex content row for legacy panels.
+   D-Zenith pages need a full-width block viewport instead. */
+.main__container .dc-tabs__content--main__tabs {
+    display: block !important;
+    width: 100%;
+    box-sizing: border-box;
+}
