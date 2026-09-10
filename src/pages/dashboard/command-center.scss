@@ -1,0 +1,238 @@
+.dz-command.dz-tool-page {
+    background: radial-gradient(ellipse at 85% 8%, #25205280, transparent 40%), #080e1b;
+    padding-top: 36px;
+}
+.dz-command-hero {
+    max-width: 1180px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 32px;
+    align-items: center;
+    min-height: 420px;
+    border-bottom: 1px solid #26344c;
+    padding-bottom: 40px;
+}
+.dz-command-copy h1 {
+    font-size: clamp(38px, 4.5vw, 66px);
+    font-weight: 750;
+    letter-spacing: -0.055em;
+    line-height: 1.07;
+    margin: 24px 0;
+    color: #f1f6ff;
+}
+.dz-command-copy h1 em {
+    font-style: normal;
+    color: #91f5dc;
+}
+.dz-command-copy p {
+    font-size: 16px;
+    line-height: 1.8;
+    max-width: 490px;
+    color: #a6b7cf;
+}
+.dz-command-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+}
+.dz-command-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 32px;
+    font: 10px monospace;
+    letter-spacing: 2px;
+    color: #94a8c4;
+}
+.dz-core-art {
+    position: relative;
+    min-height: 340px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(#24344b33 1px, transparent 1px), linear-gradient(90deg, #24344b33 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: radial-gradient(ellipse, #000 55%, transparent 76%);
+}
+.dz-core-orbit {
+    position: absolute;
+    width: 270px;
+    height: 270px;
+    border: 1px solid #6072a680;
+    border-radius: 50%;
+    box-shadow: 0 0 80px #7460ff20;
+    animation: dz-orbit 22s linear infinite;
+}
+.dz-core-orbit:before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #91f5dc;
+    box-shadow: 0 0 24px #91f5dc;
+}
+.dz-core-orbit--inner {
+    width: 210px;
+    height: 210px;
+    border-style: dashed;
+    animation-direction: reverse;
+}
+.dz-core-mark {
+    font-size: 140px;
+    color: #a6fff0;
+    line-height: 1;
+    text-shadow:
+        0 0 45px #60dbc477,
+        12px 14px 0 #6653c633;
+}
+.dz-core-label {
+    position: absolute;
+    bottom: 18px;
+    font: 10px monospace;
+    letter-spacing: 3px;
+    color: #b6a8ff;
+}
+.dz-core-coordinate {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font: 9px/1.8 monospace;
+    letter-spacing: 1px;
+    color: #93a5c0;
+}
+.dz-command-section {
+    max-width: 1180px;
+    margin: 36px auto;
+}
+.dz-command-title h2 {
+    font-size: 26px;
+    color: #ecf4ff;
+    margin: 10px 0;
+    letter-spacing: -0.035em;
+}
+.dz-command-title p {
+    color: #a6b7cf;
+    font-size: 14px;
+    margin: 0 0 22px;
+}
+.dz-launch-grid {
+    max-width: 1180px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+.dz-launch-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    border: 1px solid #29364e;
+    border-radius: 18px;
+    background: linear-gradient(140deg, #172239, #0e1728);
+    padding: 26px;
+    color: #eef5ff;
+    cursor: pointer;
+    transition:
+        transform 0.2s,
+        border-color 0.2s;
+}
+.dz-launch-card:hover {
+    transform: translateY(-4px);
+    border-color: #85e7d1;
+}
+.dz-launch-number {
+    font: 10px monospace;
+    color: #a4b6d0;
+    letter-spacing: 2px;
+}
+.dz-launch-icon {
+    font-size: 38px;
+    color: #a89bff;
+    margin: 24px 0 10px;
+}
+.dz-launch-card h3 {
+    font-size: 22px;
+    margin: 0 0 12px;
+}
+.dz-launch-card p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #a6b7cf;
+    margin: 0 0 28px;
+}
+.dz-launch-link {
+    margin-top: auto;
+    color: #8cebd5;
+    font-size: 13px;
+    font-weight: 700;
+}
+.dz-command-footer {
+    max-width: 1180px;
+    margin: 36px auto 0;
+    border-top: 1px solid #26344c;
+    padding-top: 24px;
+    display: flex;
+    gap: 32px;
+    align-items: start;
+}
+.dz-command-footer span {
+    font: 10px/1.7 monospace;
+    letter-spacing: 2px;
+    color: #8fead5;
+    min-width: 200px;
+}
+.dz-command-footer p {
+    font-size: 12px;
+    line-height: 1.8;
+    color: #9aaec9;
+    margin: 0;
+}
+@keyframes dz-orbit {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@media (max-width: 760px) {
+    .dz-command-hero {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .dz-core-art {
+        min-height: 240px;
+        grid-row: 2;
+    }
+    .dz-core-orbit {
+        width: 210px;
+        height: 210px;
+    }
+    .dz-core-orbit--inner {
+        width: 165px;
+        height: 165px;
+    }
+    .dz-core-mark {
+        font-size: 105px;
+    }
+    .dz-launch-grid {
+        grid-template-columns: 1fr;
+    }
+    .dz-command-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .dz-command-copy h1 {
+        font-size: 42px;
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .dz-core-orbit {
+        animation: none;
+    }
+    .dz-launch-card {
+        transition: none;
+    }
+}

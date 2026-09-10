@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import brandConfig from '../../../brand.config.json';
 import './live-market.scss';
+import './polish.scss';
 
 export const MARKETS = [
     ['R_75', 'Volatility 75 Index'],
@@ -203,15 +204,28 @@ export function LiveStatus() {
 }
 export function LiveDigits() {
     const { ticks, precision } = useLiveMarket();
+    if (precision === null || !ticks.length) return <span>Waiting for market data…</span>;
+    const recent = ticks.slice(-10);
     return (
-        <strong>
-            {precision === null || !ticks.length
-                ? 'Waiting for market data…'
-                : ticks
-                      .slice(-12)
-                      .map(tick => digitOf(tick.quote, precision))
-                      .join(' · ')}
-        </strong>
+        <div className='dz-digit-balls' role='list' aria-label='Last ten digits, oldest to newest'>
+            {recent.map((tick, index) => {
+                const digit = digitOf(tick.quote, precision);
+                return (
+                    <span
+                        role='listitem'
+                        aria-label={digit + (index === recent.length - 1 ? ', latest' : '')}
+                        key={tick.epoch}
+                        className={
+                            'dz-digit-ball' +
+                            (digit % 2 ? ' dz-digit-ball--odd' : '') +
+                            (index === recent.length - 1 ? ' dz-digit-ball--latest' : '')
+                        }
+                    >
+                        {digit}
+                    </span>
+                );
+            })}
+        </div>
     );
 }
 export function LiveTape() {
@@ -239,8 +253,13 @@ export function LiveTape() {
                 <span>{ticks.length} / 200 ticks buffered</span>
             </div>
             <div className='dz-live-digits'>
-                <small>Recent digits · oldest → newest</small>
+                <small>Last 10 digits · oldest → newest</small>
                 <LiveDigits />
+                <div className='dz-digit-legend'>
+                    <span>Even</span>
+                    <span>Odd</span>
+                    <span>Ring = newest tick</span>
+                </div>
             </div>
         </section>
     );

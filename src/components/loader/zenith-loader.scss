@@ -1,0 +1,124 @@
+.dz-boot {
+    min-height: 65vh;
+    flex: 1;
+    width: 100%;
+    display: grid;
+    place-items: center;
+    background: radial-gradient(ellipse at center, #211c4260, transparent 55%), #080e1b;
+    color: #edf5ff;
+    position: relative;
+    overflow: hidden;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+.dz-boot__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(#293a501c 1px, transparent 1px), linear-gradient(90deg, #293a501c 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: radial-gradient(ellipse, #000, transparent 70%);
+}
+.dz-boot__content {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    max-width: 520px;
+}
+.dz-boot__brand {
+    font: 11px monospace;
+    letter-spacing: 3px;
+    color: #a9b9d2;
+}
+.dz-boot__core {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    display: grid;
+    place-items: center;
+    margin: 40px 0 26px;
+}
+.dz-boot__core i {
+    position: absolute;
+    inset: 0;
+    border: 1px solid #314660;
+    border-top: 2px solid #8aeed6;
+    border-radius: 50%;
+    animation: dz-boot-spin 2.5s linear infinite;
+}
+.dz-boot__core i:nth-child(2) {
+    inset: 12px;
+    border-top-color: #ac9bff;
+    animation-direction: reverse;
+    animation-duration: 4s;
+}
+.dz-boot__core b {
+    font-size: 65px;
+    color: #a1ffe7;
+    text-shadow: 0 0 28px #66ebc955;
+}
+.dz-boot h2 {
+    font-size: clamp(24px, 4vw, 34px);
+    letter-spacing: -1px;
+    margin: 0 0 14px;
+}
+.dz-boot p {
+    font-size: 14px;
+    color: #a3b6d0;
+    line-height: 1.7;
+}
+.dz-boot small {
+    font-size: 11px;
+    color: #b5a8f9;
+    margin-top: 18px;
+}
+.dz-boot__scan {
+    width: 180px;
+    height: 3px;
+    background: #25334b;
+    overflow: hidden;
+    margin-top: 20px;
+    border-radius: 4px;
+}
+.dz-boot__scan:after {
+    content: '';
+    display: block;
+    width: 45%;
+    height: 100%;
+    background: #8aeed6;
+    animation: dz-boot-scan 1.8s ease-in-out infinite alternate;
+}
+.dz-boot__foot {
+    font: 9px monospace;
+    letter-spacing: 2px;
+    color: #7f93b2;
+    margin-top: 48px;
+}
+.dz-boot button {
+    margin-top: 20px;
+    background: #8aeed6;
+    color: #081725;
+    padding: 12px 20px;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+@keyframes dz-boot-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+@keyframes dz-boot-scan {
+    to {
+        transform: translateX(125%);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .dz-boot__core i,
+    .dz-boot__scan:after {
+        animation: none;
+    }
+}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './styles.scss';
+import CopyTrading from './copy-trading';
 import { LiveMarketProvider, LiveStatus, LiveTape, LiveAnalysis, MarketSelector, LiveDigits } from './live-market';
 
 type Variant =
@@ -51,8 +52,8 @@ const META: Record<string, { eyebrow: string; title: string; intro: string }> = 
     },
     copy_trading: {
         eyebrow: 'Copy Trading',
-        title: 'Compare playbooks before allocating risk.',
-        intro: 'Review transparent assumptions and choose a demo allocation.',
+        title: 'Their trades. Your boundaries.',
+        intro: 'Connect a trader code through Deriv copy trading. Review the account and limits before enabling mirroring.',
     },
     accumulators: {
         eyebrow: 'Accumulators',
@@ -417,8 +418,10 @@ export default function DZenithTools({ variant }: { variant: Variant }) {
             <Manual />
         ) : variant === 'ai_trader' ? (
             <Ai />
-        ) : variant === 'free_bots' || variant === 'copy_trading' ? (
+        ) : variant === 'free_bots' ? (
             <Bots />
+        ) : variant === 'copy_trading' ? (
+            <CopyTrading />
         ) : variant === 'accumulators' ? (
             <Accumulators />
         ) : variant === 'competition' ? (
@@ -426,20 +429,25 @@ export default function DZenithTools({ variant }: { variant: Variant }) {
         ) : (
             <Automation kind={variant} />
         );
-    return (
-        <LiveMarketProvider key={variant}>
-            <main className='dz-tool-page'>
-                <header className='dz-page-heading'>
-                    <div>
-                        <span className='dz-eyebrow'>{meta.eyebrow}</span>
-                        <h1>{meta.title}</h1>
-                        <p>{meta.intro}</p>
+    const page = (
+        <main className='dz-tool-page'>
+            <header className='dz-page-heading'>
+                <div>
+                    <span className='dz-eyebrow'>{meta.eyebrow}</span>
+                    <h1>{meta.title}</h1>
+                    <p>{meta.intro}</p>
+                </div>
+                {variant === 'copy_trading' ? (
+                    <div className='dz-connection-card'>
+                        Deriv copy link<small>Separate account authorization</small>
                     </div>
+                ) : (
                     <LiveStatus />
-                </header>
-                <LiveTape />
-                {body}
-            </main>
-        </LiveMarketProvider>
+                )}
+            </header>
+            {variant !== 'copy_trading' && <LiveTape />}
+            {body}
+        </main>
     );
+    return variant === 'copy_trading' ? page : <LiveMarketProvider key={variant}>{page}</LiveMarketProvider>;
 }
