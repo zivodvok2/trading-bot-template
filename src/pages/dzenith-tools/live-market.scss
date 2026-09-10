@@ -1,0 +1,77 @@
+.dz-tool-page {
+    .dz-live-tape {
+        max-width: 1180px;
+        margin: 0 auto 24px;
+        padding: 22px;
+        display: grid;
+        grid-template-columns: minmax(190px, 1.2fr) 1fr 1fr;
+        gap: 20px;
+        background: #111d30;
+        border: 1px solid #2b3b54;
+        border-radius: 18px;
+        box-sizing: border-box;
+    }
+    .dz-live-tape > div {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+    }
+    .dz-live-tape small {
+        color: #acbed4;
+        font-size: 12px;
+    }
+    .dz-live-tape b {
+        font-size: 24px;
+        font-variant-numeric: tabular-nums;
+        color: #61e7cf;
+    }
+    .dz-live-tape span {
+        font-size: 13px;
+        color: #c7d2e2;
+    }
+    .dz-live-tape .dz-live-digits {
+        grid-column: 1/-1;
+        padding-top: 14px;
+        border-top: 1px solid #2b3b54;
+    }
+    .dz-live-digits strong {
+        font-size: 22px;
+        letter-spacing: 2px;
+        overflow-wrap: anywhere;
+    }
+    .dz-connection-card:not([data-feed-status='Live']) .dz-status-dot {
+        background: #eab65d;
+        box-shadow: none;
+    }
+    .dz-stat-grid span {
+        display: block;
+        color: #acbed4;
+        font-size: 13px;
+        margin-top: 8px;
+    }
+    .dz-digit-cell i {
+        transition: height 0.25s ease;
+        min-height: 0;
+    }
+    .dz-digit-cell small {
+        color: #acbed4;
+        font-size: 11px;
+    }
+    @media (max-width: 700px) {
+        .dz-live-tape {
+            grid-template-columns: 1fr 1fr;
+            padding: 16px;
+            gap: 16px;
+        }
+        .dz-live-tape > label {
+            grid-column: 1/-1;
+        }
+        .dz-live-tape b {
+            font-size: 20px;
+        }
+        .dz-digit-grid {
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+        }
+    }
+}
