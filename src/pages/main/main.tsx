@@ -452,7 +452,7 @@ const AppWrapper = observer(() => {
                             <div label={<><span className='dz-tab-glyph'>⌁</span><span>Market Analysis</span></>} id='id-market-analysis'><DZenithTools variant='market_analysis' /></div>
                             <div label={<><span className='dz-tab-glyph'>◌</span><span>Analysis Tool</span></>} id='id-analysis-tool'><DZenithTools variant='analysis_tool' /></div>
                             <div label={<><span className='dz-tab-glyph'>↗</span><span>Manual Trader</span></>} id='id-manual-trader'><DZenithTools variant='manual_trader' /></div>
-                            <div label={<><span className='dz-tab-glyph'>✦</span><span>AI Trader</span></>} id='id-ai-trader'><DZenithTools variant='ai_trader' /></div>
+                            <div label={<><span className='dz-tab-glyph'>✦</span><span>Auto Trader</span></>} id='id-ai-trader'><DZenithTools variant='ai_trader' /></div>
                             <div label={<><span className='dz-tab-glyph'>◈</span><span>Free Bots</span></>} id='id-free-bots'><DZenithTools variant='free_bots' /></div>
                             <div label={<><span className='dz-tab-glyph'>◎</span><span>Copy Trading</span></>} id='id-copy-trading'><DZenithTools variant='copy_trading' /></div>
                             <div label={<><span className='dz-tab-glyph'>◇</span><span>Accumulators</span></>} id='id-accumulators'><DZenithTools variant='accumulators' /></div>

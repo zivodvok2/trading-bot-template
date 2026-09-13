@@ -73,7 +73,7 @@ export const generateDerivApiInstance = async (forceNew = false) => {
 
             currentWebSocketURL = wsURL;
 
-            console.log('[DerivAPI] Creating new WebSocket connection to:', wsURL);
+            // Do not log authenticated WebSocket URLs: they may contain one-time credentials.
             const deriv_socket = new WebSocket(wsURL);
             const deriv_api = new DerivAPIBasic({
                 connection: deriv_socket,

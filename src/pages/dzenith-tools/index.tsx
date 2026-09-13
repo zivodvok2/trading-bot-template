@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './styles.scss';
 import CopyTrading from './copy-trading';
+import AutoTrader from './auto-trader/auto-trader';
 import { LiveMarketProvider, LiveStatus, LiveTape, LiveAnalysis, MarketSelector, LiveDigits } from './live-market';
 
 type Variant =
@@ -36,9 +37,9 @@ const META: Record<string, { eyebrow: string; title: string; intro: string }> = 
         intro: 'A real contract ticket for the strategy types and trade explanations used in the original project.',
     },
     ai_trader: {
-        eyebrow: 'AI Strategy Lab',
-        title: 'Convert your idea into rules you can audit.',
-        intro: 'Draft a strategy with local templates. AI model integration is not yet connected; no trades are placed.',
+        eyebrow: 'Auto Trader',
+        title: 'Analyse. Execute. Stay in control.',
+        intro: 'Live statistical analysis with opt-in automated execution and session risk limits.',
     },
     free_bots: {
         eyebrow: 'Free Bots',
@@ -165,60 +166,6 @@ function Manual() {
                     <li>Use demo funds while validating</li>
                     <li>Never chase a previous loss</li>
                 </ul>
-            </Panel>
-        </div>
-    );
-}
-function Ai() {
-    const [idea, setIdea] = useState('');
-    const [result, setResult] = useState('');
-    return (
-        <div className='dz-stack'>
-            <Panel title='AI strategy brief'>
-                <label className='dz-field'>
-                    Describe the setup
-                    <textarea
-                        value={idea}
-                        onChange={e => setIdea(e.target.value)}
-                        placeholder='Compare the last 60 digits and only consider Over when distribution is stable...'
-                    />
-                </label>
-                <div className='dz-form-row'>
-                    <MarketSelector />
-                    <SelectField label='Risk profile' value='Conservative' onChange={() => undefined}>
-                        <option>Conservative</option>
-                        <option>Balanced</option>
-                        <option>Experimental</option>
-                    </SelectField>
-                </div>
-                <button
-                    className='dz-primary'
-                    onClick={() =>
-                        setResult(
-                            idea
-                                ? 'Use a 60-tick sample, require two confirming conditions, cap each stake at 1% of demo balance, and stop after three consecutive losses.'
-                                : 'Describe your setup first, then generate an auditable ruleset.'
-                        )
-                    }
-                >
-                    Generate auditable ruleset →
-                </button>
-                {result && (
-                    <div className='dz-result'>
-                        <b>Local rules template · no AI model connected</b>
-                        <span>{result}</span>
-                    </div>
-                )}
-            </Panel>
-            <Panel title='Guardrails'>
-                <div className='dz-guardrail-grid'>
-                    <b>Explainable</b>
-                    <span>Every signal becomes a visible rule.</span>
-                    <b>Demo-first</b>
-                    <span>No order is sent from this panel.</span>
-                    <b>Private</b>
-                    <span>Provider secrets stay server-side.</span>
-                </div>
             </Panel>
         </div>
     );
@@ -417,7 +364,7 @@ export default function DZenithTools({ variant }: { variant: Variant }) {
         ) : variant === 'manual_trader' ? (
             <Manual />
         ) : variant === 'ai_trader' ? (
-            <Ai />
+            <AutoTrader />
         ) : variant === 'free_bots' ? (
             <Bots />
         ) : variant === 'copy_trading' ? (

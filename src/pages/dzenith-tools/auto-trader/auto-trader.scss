@@ -1,0 +1,84 @@
+.dz-auto .dz-auto-signal {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 20px;
+    margin-bottom: 24px;
+    border: 1px solid #64cfb660;
+    border-radius: 12px;
+    background: #64cfb610;
+    color: #b2ffe8;
+    font-size: 16px;
+}
+.dz-auto-signal span {
+    font-size: 13px;
+    color: #aebdd2;
+}
+.dz-auto .dz-form-row {
+    gap: 20px;
+}
+.dz-auto-consent {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c4d2e4;
+    margin: 24px 0;
+}
+.dz-auto-consent input {
+    margin-top: 6px;
+    flex-shrink: 0;
+}
+.dz-auto-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+}
+.dz-auto .dz-auto-stop {
+    border: 1px solid #e48795;
+    color: #ffc5ce;
+}
+.dz-auto-warning {
+    background: #d9931c15;
+    border: 1px solid #cd9d4266;
+    color: #f6d6a1;
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 18px 0;
+}
+.dz-auto-warning button {
+    display: block;
+    margin-top: 12px;
+}
+.dz-auto-status {
+    font-size: 14px;
+    color: #d5e9e3;
+    line-height: 1.7;
+    padding: 16px;
+    border-left: 3px solid #74e9c9;
+    background: #74e9c911;
+}
+.dz-auto-journal {
+    list-style: none;
+    padding: 0;
+    max-height: 330px;
+    overflow: auto;
+}
+.dz-auto-journal li {
+    display: flex;
+    gap: 18px;
+    padding: 12px 0;
+    border-bottom: 1px solid #2d3b51;
+    font-size: 13px;
+    color: #bfcee1;
+    line-height: 1.6;
+}
+.dz-auto-journal time {
+    white-space: nowrap;
+    color: #97a5bb;
+    font: 11px/1.7 monospace;
+}
