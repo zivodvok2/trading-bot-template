@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './styles.scss';
 import CopyTrading from './copy-trading';
 import AutoTrader from './auto-trader/auto-trader';
+import FreeBots from './free-bots';
 import { LiveMarketProvider, LiveStatus, LiveTape, LiveAnalysis, MarketSelector, LiveDigits } from './live-market';
 
 type Variant =
@@ -17,14 +18,6 @@ type Variant =
     | 'speed_bot'
     | 'ea_bots';
 
-const BOTS = [
-    ['Even Odd Percentage Based', 'Trade Even or Odd when the rolling percentage crosses your threshold.', 'Digit'],
-    ['Even Odd Pattern Reverse', 'Read the last five digits and take the opposing parity signal.', 'Pattern'],
-    ['Digit Over Compounder', 'Adaptive stake sizing with a hard session stop.', 'Compounding'],
-    ['Under 8 Smart Strategy', 'Pattern recognition for Under 8 contracts.', 'Digit'],
-    ['Dynamic Digits Auto Bot', 'Switch between digit types as distribution changes.', 'Adaptive'],
-    ['Fibonacci Sequence Bot', 'Controlled progression with maximum steps and reset rules.', 'Risk'],
-];
 const META: Record<string, { eyebrow: string; title: string; intro: string }> = {
     market_analysis: {
         eyebrow: 'Market Analysis',
@@ -43,8 +36,8 @@ const META: Record<string, { eyebrow: string; title: string; intro: string }> = 
     },
     free_bots: {
         eyebrow: 'Free Bots',
-        title: 'Load a tested idea into Bot Builder.',
-        intro: 'Ready-to-use digit, pattern, compounder and progression strategies.',
+        title: 'Your next strategy starts in the builder.',
+        intro: 'Load an original XML bot, inspect its rules, and test on demo.',
     },
     analysis_tool: {
         eyebrow: 'Analysis Tool',
@@ -166,54 +159,6 @@ function Manual() {
                     <li>Use demo funds while validating</li>
                     <li>Never chase a previous loss</li>
                 </ul>
-            </Panel>
-        </div>
-    );
-}
-function Bots() {
-    const [selected, setSelected] = useState('');
-    return (
-        <div className='dz-stack'>
-            <Panel title='Strategy library'>
-                <div className='dz-bot-grid'>
-                    {BOTS.map(bot => (
-                        <button
-                            className={'dz-bot-card ' + (selected === bot[0] ? 'is-selected' : '')}
-                            key={bot[0]}
-                            onClick={() => setSelected(bot[0])}
-                        >
-                            <span>{bot[2]}</span>
-                            <b>{bot[0]}</b>
-                            <p>{bot[1]}</p>
-                            <small>Open details →</small>
-                        </button>
-                    ))}
-                </div>
-                {selected && (
-                    <div className='dz-result'>
-                        <b>{selected}</b>
-                        <span>Strategy selected. Assemble and test it in Bot Builder.</span>
-                        <button className='dz-secondary' onClick={() => (window.location.hash = 'bot_builder')}>
-                            Open Bot Builder
-                        </button>
-                    </div>
-                )}
-            </Panel>
-            <Panel title='Risk calculator'>
-                <div className='dz-stat-grid'>
-                    <div>
-                        <small>Suggested stake</small>
-                        <b>0.5–1%</b>
-                    </div>
-                    <div>
-                        <small>Stop after</small>
-                        <b>3 losses</b>
-                    </div>
-                    <div>
-                        <small>Mode</small>
-                        <b>Demo first</b>
-                    </div>
-                </div>
             </Panel>
         </div>
     );
@@ -366,7 +311,7 @@ export default function DZenithTools({ variant }: { variant: Variant }) {
         ) : variant === 'ai_trader' ? (
             <AutoTrader />
         ) : variant === 'free_bots' ? (
-            <Bots />
+            <FreeBots />
         ) : variant === 'copy_trading' ? (
             <CopyTrading />
         ) : variant === 'accumulators' ? (
