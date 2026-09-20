@@ -6,13 +6,19 @@ import type { Broker, Settings } from './engine';
 
 export const pendingKey = (id: string) => `dzenith:auto:pending:${id}`;
 type Message = {
+    sell?: { sold_for: number };
     req_id?: number;
     error?: { code?: string };
-    proposal?: { id: string; ask_price: number };
+    proposal?: { id: string; ask_price: number; payout?: number; longcode?: string };
     buy?: { contract_id: number | string };
-    proposal_open_contract?: { is_sold: number; profit: number; contract_id: number | string };
+    proposal_open_contract?: { is_sold: number; profit: number; contract_id: number | string; is_valid_to_sell?: number; bid_price?: number };
 };
-export async function createBroker(): Promise<Broker> {
+export interface TicketBroker extends Broker {
+    ticket: (parameters: Record<string, unknown>) => Promise<{id:string;price:number;payout?:number;description:string}>;
+    contract: (id:string) => Promise<NonNullable<Message['proposal_open_contract']>>;
+    sell: (id:string) => Promise<void>;
+}
+export async function createBroker(): Promise<TicketBroker> {
     const auth = OAuthTokenExchangeService.getAuthInfo();
     const selected = localStorage.getItem('active_loginid');
     if (!auth?.access_token || !selected) throw new Error('Log in to Deriv and select an account first.');
@@ -110,6 +116,20 @@ export async function createBroker(): Promise<Broker> {
         if (socket.readyState === WebSocket.OPEN) socket.send(JSON.stringify({ ping: 1 }));
     }, 25000);
     return {
+        ticket: async parameters => {
+            const response = await request({ ...parameters, proposal: 1, currency: account.currency });
+            if(!response.proposal?.id || !Number.isFinite(response.proposal.ask_price) || response.proposal.ask_price<=0) throw new Error('No valid quote returned.');
+            return {id:response.proposal.id,price:response.proposal.ask_price,payout:response.proposal.payout,description:response.proposal.longcode || 'Review contract settings before purchase.'};
+        },
+        contract: async id => {
+            const response=await request({proposal_open_contract:1,contract_id:id});
+            if(!response.proposal_open_contract || String(response.proposal_open_contract.contract_id)!==id) throw new Error('Contract status could not be verified.');
+            return response.proposal_open_contract;
+        },
+        sell: async id => {
+            const response=await request({sell:id,price:0});
+            if(!response.sell || !Number.isFinite(response.sell.sold_for)) throw new Error('Sale not confirmed. Refresh contract status before retrying.');
+        },
         account: { id: selected, type: account.account_type, currency: account.currency },
         ready,
         quote: async (contract: string, market: string, s: Settings) => {

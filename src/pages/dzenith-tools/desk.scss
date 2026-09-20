@@ -1,0 +1,35 @@
+.dc-tabs__list--main__tabs { justify-content: center; justify-content: safe center; }
+.dz-tool-page { --desk-accent: #27dcc7; background: radial-gradient(ellipse at top right,#252047 0,transparent 55%),#0c1022; padding: 24px 28px 125px; }
+.dz-tool-page .dz-page-heading { margin-bottom: 18px; align-items:center; }
+.dz-tool-page .dz-page-heading h1 { font-size:clamp(22px,2.6vw,32px); line-height:1.2; }
+.dz-tool-page .dz-panel { padding:24px; border:1px solid #343d59; background:linear-gradient(130deg,#18203b,#141a30); border-radius:16px; }
+.dz-tool-page p,.dz-tool-page label { font-size:14px; line-height:1.6; }
+.dz-tool-page .dz-panel-heading { font-size:14px; letter-spacing:.07em; }
+.dz-observatory { display:grid; gap:20px; }
+.dz-price-trace { width:100%; height:220px; color:#37e4d0; filter:drop-shadow(0 0 5px #27dcc744); }
+.dz-trace-grid { stroke:#59658455; fill:none; }
+.dz-metric-strip { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; margin:18px 0; }
+.dz-metric-strip>div { padding:14px; border-left:2px solid #27dcc7; background:#0b142a; }
+.dz-metric-strip small,.dz-metric-strip b { display:block; }
+.dz-metric-strip small { font-size:13px; color:#b3c4da; }
+.dz-metric-strip b { font:600 23px/1.5 monospace; color:#eef8ff; }
+.dz-frequency { display:grid; grid-template-columns:repeat(10,minmax(48px,1fr)); gap:12px; overflow:auto; padding:10px 0; }
+.dz-frequency>div { display:flex; flex-direction:column; align-items:center; gap:10px; }
+.dz-orb { display:grid; place-items:center; width:42px; height:42px; border-radius:50%; border:1px solid #60e9d1; background:radial-gradient(at 30% 25%,#4e7a85,#132239); box-shadow:0 0 16px #27dcc71a; font-size:21px; }
+.dz-orb.odd { border-color:#be7bf1; background:radial-gradient(at 30% 25%,#715690,#211937); }
+.dz-frequency-track { height:90px; width:100%; background:#080e2088; display:flex; align-items:flex-end; border-radius:5px; overflow:hidden; }
+.dz-frequency-track i { display:block; width:100%; max-height:100%; background:linear-gradient(#50f1d5,#177981); transition:height .3s; }
+.dz-frequency strong { font-size:15px; }.dz-frequency small { font-size:12px; color:#b5bfd4; }
+.dz-direction-meter { display:flex; background:#657080; height:12px; border-radius:8px; overflow:hidden; }.dz-direction-meter i { background:#2de0bc; }.dz-direction-meter i+i { background:#cb78f0; }
+.dz-matrix-wrap { overflow:auto; }.dz-matrix { width:100%; border-spacing:4px; min-width:600px; font-size:14px; text-align:center; }.dz-matrix th,.dz-matrix td { padding:12px 6px; border:1px solid #30405b; }
+.dz-order-review { margin:18px 0; padding:18px; border:1px solid #27dcc7; border-radius:12px; }.dz-order-review button { margin-right:10px; margin-top:10px; }
+.dz-ticket fieldset { border:0; padding:0; margin:20px 0; }.dz-ticket>button { margin-right:10px; }
+.dz-dock { position:fixed; right:22px; bottom:70px; z-index:1000; font-size:14px; color:#edf5ff; }
+.dz-dock-trigger { display:flex; align-items:center; gap:12px; border:1px solid #4df5dc; color:#ecffff; background:#11253a; border-radius:28px; padding:12px 20px; box-shadow:0 6px 26px #0007; cursor:pointer; margin-left:auto; text-align:left; font-size:15px; }
+.dz-dock-trigger>span:first-child { color:#43f0cf; font-size:26px; }.dz-dock-trigger small { display:block; color:#bcd3e9; font-size:12px; }.dz-dock-trigger.is-armed { background:#065c51; }
+.dz-dock-console { width:min(680px,calc(100vw - 32px)); max-height:calc(100dvh - 190px); overflow-y:auto; background:#10182e; border:1px solid #536287; padding:20px; border-radius:18px; margin-bottom:12px; box-shadow:0 10px 60px #0009; }
+.dz-dock-console[hidden] { display:none; }.dz-dock-console header { display:flex; justify-content:space-between; align-items:center; }.dz-dock-console h2 { margin:4px 0; font-size:24px; }.dz-dock-console header button { color:white; background:#263552; border:0; border-radius:8px; padding:5px 14px; font-size:24px; cursor:pointer; }
+.dz-dock-console p { font-size:14px; line-height:1.6; }.dz-dock-console .dz-panel { background:#18233d; padding:18px; border:1px solid #3a4865; border-radius:12px; }.dz-dock-console .dz-field { font-size:14px; }.dz-dock-console input,.dz-dock-console select { min-height:40px; font-size:14px; }
+.dz-platform-guide { padding:28px; margin:0 auto 24px; max-width:1100px; color:var(--text-general); font-size:16px; line-height:1.6; }.dz-platform-guide h1 { font-size:28px; }.dz-platform-guide details { border-bottom:1px solid #8090a544; padding:16px 0; }.dz-platform-guide summary { cursor:pointer; font-weight:600; }.dz-platform-guide a { color:#388db5; }
+@media(max-width:700px){.dz-tool-page { padding:18px 12px 140px; }.dz-tool-page .dz-panel{padding:16px;}.dz-dock{right:12px;bottom:65px;}.dz-dock-console{padding:12px;}.dz-frequency{gap:8px;}.dz-price-trace{height:170px;}}
+@media(prefers-reduced-motion:reduce){.dz-frequency-track i{transition:none;}}

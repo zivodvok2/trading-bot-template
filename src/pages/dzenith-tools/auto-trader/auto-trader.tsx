@@ -4,7 +4,7 @@ import { analyse, AutoSession, Broker, defaults, Journal, Settings, validate } f
 import { acquireSession, createBroker, pendingKey } from './broker';
 import './auto-trader.scss';
 
-export default function AutoTrader() {
+export default function AutoTrader({ onActivity }: { onActivity?: (state: { running: boolean; busy: boolean; pnl: number }) => void }) {
     const feed = useLiveMarket();
     const feedRef = useRef(feed);
     feedRef.current = feed;
@@ -22,6 +22,7 @@ export default function AutoTrader() {
     const unlock = useRef<(() => void) | null>(null);
     const mounted = useRef(true);
     const signal = analyse(feed, settings);
+    useEffect(() => { onActivity?.(report); }, [report.running, report.busy, report.pnl, onActivity]);
     const update = () => {
         const s = session.current;
         if (s && mounted.current) {
@@ -269,7 +270,7 @@ export default function AutoTrader() {
                         onChange={e => setAgreed(e.target.checked)}
                     />
                     I approve this session’s market, strategy and limits. I understand automatic trades can lose the
-                    stake and changing tabs stops new entries, not existing contracts.
+                    stake. Site tabs can change while this session stays armed; hiding the browser stops new entries.
                 </label>
                 {account?.type === 'real' && (
                     <label className='dz-field'>
@@ -311,7 +312,7 @@ export default function AutoTrader() {
                     </button>
                 </div>
                 <p className='dz-muted-copy'>
-                    Keep this tab open and visible. Closing, hiding, switching markets/accounts, or losing fresh data
+                    Keep this browser tab open and visible. Closing, hiding, switching markets/accounts, or losing fresh data
                     stops new entries. Stop does not sell an open contract. Do not run another bot on the same account.
                 </p>
                 {pendingId && (

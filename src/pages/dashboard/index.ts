@@ -1,1 +1,1 @@
-export { default } from './command-center';
+export { default } from './dashboard';

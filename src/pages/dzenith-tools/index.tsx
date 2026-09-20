@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './styles.scss';
 import CopyTrading from './copy-trading';
-import AutoTrader from './auto-trader/auto-trader';
+import { MarketOverview, AnalysisLab } from './market-workbench';
+import TradeTicket from './trade-ticket';
 import FreeBots from './free-bots';
-import { LiveMarketProvider, LiveStatus, LiveTape, LiveAnalysis, MarketSelector, LiveDigits } from './live-market';
+import { LiveStatus, LiveTape } from './live-market';
 
 type Variant =
     | 'market_analysis'
@@ -22,17 +23,17 @@ const META: Record<string, { eyebrow: string; title: string; intro: string }> = 
     market_analysis: {
         eyebrow: 'Market Analysis',
         title: 'Read the tape before choosing a contract.',
-        intro: 'Market selection, digit distribution, direction balance and strategy signals from the original D-Zenith desk.',
+        intro: 'Live price action, digit distribution and market movement at a glance.',
     },
     manual_trader: {
         eyebrow: 'Manual Trader',
         title: 'Choose the contract, then define the risk.',
-        intro: 'A real contract ticket for the strategy types and trade explanations used in the original project.',
+        intro: 'Quote, review and buy one contract on your selected Deriv account.',
     },
     ai_trader: {
         eyebrow: 'Auto Trader',
         title: 'Analyse. Execute. Stay in control.',
-        intro: 'Live statistical analysis with opt-in automated execution and session risk limits.',
+        intro: 'A single site-wide session, explicit permission and visible risk limits.',
     },
     free_bots: {
         eyebrow: 'Free Bots',
@@ -42,7 +43,7 @@ const META: Record<string, { eyebrow: string; title: string; intro: string }> = 
     analysis_tool: {
         eyebrow: 'Analysis Tool',
         title: 'Measure digits, direction and volatility.',
-        intro: 'Evaluate a sample before making a prediction.',
+        intro: 'Freeze a sample and investigate historical rules without placing trades.',
     },
     copy_trading: {
         eyebrow: 'Copy Trading',
@@ -52,12 +53,12 @@ const META: Record<string, { eyebrow: string; title: string; intro: string }> = 
     accumulators: {
         eyebrow: 'Accumulators',
         title: 'Configure growth rate and market behavior.',
-        intro: 'Supported markets, growth rates, live digits and stake controls.',
+        intro: 'Understand range risk, choose growth and take profit, then review a live quote.',
     },
     competition: {
         eyebrow: 'Competition',
         title: 'Compete on consistency, not noise.',
-        intro: 'A leaderboard, prize structure and clear rules for synthetic-index practice.',
+        intro: 'Competition status and published rules will appear here when available.',
     },
     ultimate_bot: {
         eyebrow: 'Ultimate Bot',
@@ -86,236 +87,31 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
         </section>
     );
 }
-function SelectField({
-    label,
-    value,
-    onChange,
-    children,
-}: {
-    label: string;
-    value: string;
-    onChange: (v: string) => void;
-    children: React.ReactNode;
-}) {
-    return (
-        <label className='dz-field'>
-            {label}
-            <select value={value} onChange={e => onChange(e.target.value)}>
-                {children}
-            </select>
-        </label>
-    );
-}
-function Manual() {
-    const [strategy, setStrategy] = useState('Rise / Fall');
-    const [stake, setStake] = useState('2');
-    const [status, setStatus] = useState('');
-    return (
-        <div className='dz-stack'>
-            <Panel title='Contract ticket'>
-                <div className='dz-form-row'>
-                    <SelectField label='Contract strategy' value={strategy} onChange={setStrategy}>
-                        <option>Rise / Fall</option>
-                        <option>Multiplier Up</option>
-                        <option>Multiplier Down</option>
-                        <option>Digit Over / Under</option>
-                        <option>Digit Even / Odd</option>
-                        <option>Ends In / Out</option>
-                    </SelectField>
-                    <MarketSelector />
-                </div>
-                <div className='dz-form-row'>
-                    <label className='dz-field'>
-                        Stake
-                        <input value={stake} onChange={e => setStake(e.target.value)} type='number' min='0.35' />
-                    </label>
-                    <label className='dz-field'>
-                        Duration
-                        <input defaultValue='5' type='number' min='1' />
-                    </label>
-                </div>
-                <div className='dz-ticket-preview'>
-                    <b>{strategy}</b>
-                    <span>Demo order preview</span>
-                    <small>Stake {'$' + stake} · 5 ticks</small>
-                </div>
-                <button
-                    className='dz-primary'
-                    onClick={() => setStatus('Demo order prepared — review before connecting your Deriv account.')}
-                >
-                    Prepare demo order →
-                </button>
-                {status && (
-                    <div className='dz-result'>
-                        <b>Ticket ready</b>
-                        <span>{status}</span>
-                    </div>
-                )}
-            </Panel>
-            <Panel title='Before you trade'>
-                <ul className='dz-check-list'>
-                    <li>Confirm direction or barrier</li>
-                    <li>Set a maximum session loss</li>
-                    <li>Use demo funds while validating</li>
-                    <li>Never chase a previous loss</li>
-                </ul>
-            </Panel>
-        </div>
-    );
-}
-function Accumulators() {
-    const [rate, setRate] = useState('3');
-    const [stake, setStake] = useState('2');
-    return (
-        <div className='dz-stack'>
-            <Panel title='Accumulator configurator'>
-                <div className='dz-form-row'>
-                    <MarketSelector />
-                    <label className='dz-field'>
-                        Stake (USD)
-                        <input type='number' value={stake} onChange={e => setStake(e.target.value)} />
-                    </label>
-                    <label className='dz-field'>
-                        Profit target (USD)
-                        <input defaultValue='0.5' type='number' />
-                    </label>
-                </div>
-                <div className='dz-rate-row'>
-                    <span>Growth rate</span>
-                    {['1', '2', '3', '4', '5'].map(r => (
-                        <button className={rate === r ? 'is-active' : ''} onClick={() => setRate(r)} key={r}>
-                            {r}%
-                        </button>
-                    ))}
-                </div>
-                <div className='dz-accu-card'>
-                    <b>Selected market</b>
-                    <span>
-                        Last digits: <LiveDigits />
-                    </span>
-                    <small>
-                        Rate {rate}% · stake {'$' + stake}
-                    </small>
-                    <button className='dz-primary'>Prepare accumulator demo</button>
-                </div>
-            </Panel>
-            <Panel title='Supported behavior'>
-                <p className='dz-muted-copy'>
-                    Accumulators express a view on the range of movement of an index. Test growth rate with a demo
-                    balance before any live use.
-                </p>
-            </Panel>
-        </div>
-    );
-}
 function Competition() {
-    const [joined, setJoined] = useState(false);
-    const rows = [
-        ['🥇', 'CR10008059', '$0.37', 'Example'],
-        ['🥈', 'CR8648863', '$0.04', 'Example'],
-        ['🥉', 'CR1234567', '$0.00', 'Example'],
-    ];
-    return (
-        <div className='dz-stack'>
-            <Panel title='Competition preview — sample data, not live standings'>
-                <div className='dz-competition-hero'>
-                    <span>🏆</span>
-                    <div>
-                        <b>Prize pool: 1st $300 · 2nd $200 · 3rd $100</b>
-                        <small>All trading must use Deriv synthetic indices.</small>
-                    </div>
-                    <button className='dz-primary' onClick={() => setJoined(true)}>
-                        {joined ? 'Joined' : 'Join competition'}
-                    </button>
-                </div>
-                <div className='dz-table-wrap'>
-                    <table className='dz-table'>
-                        <thead>
-                            <tr>
-                                <th>Rank</th>
-                                <th>Login ID</th>
-                                <th>Net profit</th>
-                                <th>Source</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {rows.map(r => (
-                                <tr key={r[1]}>
-                                    <td>{r[0]}</td>
-                                    <td>{r[1]}</td>
-                                    <td className='positive'>{r[2]}</td>
-                                    <td>{r[3]}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </Panel>
-            <Panel title='Competition rules'>
-                <ul className='dz-check-list'>
-                    <li>Start with a $10 real account</li>
-                    <li>No deposits after the start</li>
-                    <li>Net profit accounts for deposits and withdrawals</li>
-                    <li>Top three participants win prizes</li>
-                </ul>
-            </Panel>
-        </div>
-    );
+    return <Panel title='Competition centre'><h2>No active competition</h2><p className='dz-muted-copy'>This area is reserved for published rules, dates and verified results. No entry fees, registrations or prize claims are being accepted until a competition service and organiser are configured.</p></Panel>;
 }
 function Automation({ kind }: { kind: string }) {
-    const labels =
-        kind === 'ultimate_bot'
-            ? ['Adaptive signal blend', 'Trend + digit confirmation', 'Session guardrail']
-            : kind === 'speed_bot'
-              ? ['Tick duration', 'Entry trigger', 'Max rapid trades']
-              : ['Export format', 'Signal source', 'Execution mode'];
-    return (
-        <div className='dz-stack'>
-            <Panel title={kind === 'ea_bots' ? 'Expert advisor workspace' : 'Automation controls'}>
-                <div className='dz-form-row'>
-                    <MarketSelector />
-                    <SelectField label='Mode' value='Demo' onChange={() => undefined}>
-                        <option>Demo</option>
-                        <option>Backtest</option>
-                        <option>Review only</option>
-                    </SelectField>
-                </div>
-                <div className='dz-automation-list'>
-                    {labels.map(label => (
-                        <label className='dz-field' key={label}>
-                            {label}
-                            <input placeholder='Configure before running' />
-                        </label>
-                    ))}
-                </div>
-                <button className='dz-primary'>Validate automation plan →</button>
-            </Panel>
-            <Panel title='Execution boundary'>
-                <p className='dz-muted-copy'>
-                    This workspace validates rules. It does not promise profits or run unattended trades without
-                    explicit account connection and approval.
-                </p>
-            </Panel>
-        </div>
-    );
+    return <Panel title={kind === 'ea_bots' ? 'EA Bots · MT5 workspace' : 'Automation presets'}>
+        {kind === 'ea_bots' ? <><h2>Expert advisors run in MT5</h2><p className='dz-muted-copy'>An MT5 expert advisor is not a Blockly XML bot. Install and test the EA in your MT5 terminal using a demo account. This browser cannot execute an EX5 or MQL5 file. Use Free Bots for browser-compatible XML strategies.</p></> : <><h2>{kind === 'speed_bot' ? 'Short-duration automation' : 'Rule-based automation'}</h2><p className='dz-muted-copy'>Use the shared Auto Trader console to choose a strategy, tick duration, fixed stake, cooldown and session limits. These pages do not start separate hidden bots.</p><button className='dz-primary' onClick={() => window.dispatchEvent(new Event('dzenith:open-auto'))}>Open Auto Trader controls</button></>}
+    </Panel>;
 }
 export default function DZenithTools({ variant }: { variant: Variant }) {
     const meta = META[variant];
     const body =
         variant === 'market_analysis' ? (
-            <LiveAnalysis />
+            <MarketOverview />
         ) : variant === 'analysis_tool' ? (
-            <LiveAnalysis tool />
+            <AnalysisLab />
         ) : variant === 'manual_trader' ? (
-            <Manual />
+            <TradeTicket />
         ) : variant === 'ai_trader' ? (
-            <AutoTrader />
+            <section className='dz-panel'><h2>Your site-wide Auto Trader</h2><p>Open the floating Auto Trader console at the bottom right. It keeps analysing the selected market across all site tabs. Verify an account and explicitly arm a session to enable purchases.</p><p>Rules use recent tick frequencies, not a trained prediction model. You choose when to start; fixed-stake and session limits control execution. No proven trading edge is claimed.</p></section>
         ) : variant === 'free_bots' ? (
             <FreeBots />
         ) : variant === 'copy_trading' ? (
             <CopyTrading />
         ) : variant === 'accumulators' ? (
-            <Accumulators />
+            <TradeTicket accumulator />
         ) : variant === 'competition' ? (
             <Competition />
         ) : (
@@ -337,9 +133,9 @@ export default function DZenithTools({ variant }: { variant: Variant }) {
                     <LiveStatus />
                 )}
             </header>
-            {variant !== 'copy_trading' && <LiveTape />}
+            {!['copy_trading', 'analysis_tool', 'free_bots', 'competition', 'ea_bots'].includes(variant) && <LiveTape />}
             {body}
         </main>
     );
-    return variant === 'copy_trading' ? page : <LiveMarketProvider key={variant}>{page}</LiveMarketProvider>;
+    return page;
 }

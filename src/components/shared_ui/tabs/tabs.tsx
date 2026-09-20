@@ -13,6 +13,7 @@ declare module 'react' {
 }
 
 type TTabsProps = {
+    display_order?: number[];
     active_icon_color?: string;
     active_index?: number;
     background_color?: string;
@@ -38,6 +39,7 @@ type TTabsProps = {
 };
 
 const Tabs = ({
+    display_order,
     active_icon_color = '',
     active_index = 0,
     background_color = '',
@@ -171,7 +173,8 @@ const Tabs = ({
                         is_scrollbar_hidden
                         is_bypassed={!is_scrollable}
                     >
-                        {React.Children.map(children, (child, index) => {
+                        {(display_order || children.map((_, index) => index)).map(index => {
+                            const child = children[index];
                             if (!child) return null;
                             const { icon, label, id } = child.props;
                             const header_content = child.props['data-header-content'];
@@ -185,7 +188,7 @@ const Tabs = ({
                                     icon_color={icon_color}
                                     icon_size={icon_size}
                                     is_active={index === active_tab_index}
-                                    key={label}
+                                    key={id || index}
                                     is_label_hidden={children.length === 1 && single_tab_has_no_label}
                                     label={label}
                                     id={id}

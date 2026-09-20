@@ -46,6 +46,10 @@ import './main.scss';
 const ChartWrapper = lazy(() => import('../chart/chart-wrapper'));
 const Tutorial = lazy(() => import('../tutorials'));
 import DZenithTools from '../dzenith-tools';
+import { LiveMarketProvider } from '../dzenith-tools/live-market';
+import AutoDock from '../dzenith-tools/auto-dock';
+import PlatformGuide from '../dzenith-tools/platform-guide';
+import '../dzenith-tools/desk.scss';
 
 const AppWrapper = observer(() => {
     const { connectionStatus } = useApiBase();
@@ -373,7 +377,7 @@ const AppWrapper = observer(() => {
                 >
                     <div>
                         {!isDesktop && left_tab_shadow && <span className='tabs-shadow tabs-shadow--left' />}{' '}
-                        <Tabs active_index={active_tab} className='main__tabs' onTabItemClick={handleTabChange} top>
+                        <Tabs display_order={[0,1,4,5,6,7,10,9,8,2,11,12,14,13,3]} active_index={active_tab} className='main__tabs' onTabItemClick={handleTabChange} top>
                             <div
                                 label={
                                     <>
@@ -440,6 +444,7 @@ const AppWrapper = observer(() => {
                                 id='id-tutorials'
                             >
                                 <div className='tutorials-wrapper'>
+                                    <PlatformGuide />
                                     <Suspense
                                         fallback={
                                             <ChunkLoader message={localize('Please wait, loading tutorials...')} />
@@ -511,4 +516,6 @@ const AppWrapper = observer(() => {
     );
 });
 
-export default AppWrapper;
+export default function TradingApp() {
+    return <LiveMarketProvider><AppWrapper /><AutoDock /></LiveMarketProvider>;
+}
