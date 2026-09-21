@@ -27,13 +27,21 @@ export const WS_SERVERS = {
 // =============================================================================
 
 // Helper to check if we're on production domains
-export const isProduction = () => {
-    const hostname = window.location.hostname;
+export const isProductionHostname = (hostname: string) => {
     const productionDomains = Object.values(PRODUCTION_DOMAINS) as string[];
     return productionDomains.includes(hostname);
 };
+export const isProduction = () => isProductionHostname(window.location.hostname);
 
-export const isLocal = () => /localhost(:\d+)?$/i.test(window.location.hostname);
+// Private LAN ranges (RFC 1918) plus loopback and mDNS, so testing over WiFi
+// from another device (e.g. a phone hitting the dev machine's LAN IP) still
+// resolves to the same Deriv environment as localhost.
+const PRIVATE_NETWORK_HOSTNAME =
+    /^(127\.0\.0\.1|::1|10(\.\d{1,3}){3}|192\.168(\.\d{1,3}){2}|172\.(1[6-9]|2\d|3[01])(\.\d{1,3}){2}|[^.]+\.local)$/i;
+
+export const isLocalHostname = (hostname: string) =>
+    /localhost(:\d+)?$/i.test(hostname) || PRIVATE_NETWORK_HOSTNAME.test(hostname);
+export const isLocal = () => isLocalHostname(window.location.hostname);
 
 const getDefaultServerURL = () => {
     const isProductionEnv = isProduction() || isLocal();
