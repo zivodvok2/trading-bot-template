@@ -1,8 +1,15 @@
 import React from 'react';
 import classNames from 'classnames';
 import { useConstructor } from '@/hooks/useConstructor';
+// Import via the direct component path (not the '../themed-scrollbars' barrel)
+// but still pull in its stylesheet explicitly -- the barrel's only role here
+// is bundling that CSS import as a side effect, and relying on some other,
+// unrelated component to have already imported it first is fragile: it broke
+// silently for any page that renders Tabs without also rendering one of the
+// handful of components that import the barrel.
 import ThemedScrollbars from '../themed-scrollbars/themed-scrollbars';
 import Tab from './tab';
+import '../themed-scrollbars/themed-scrollbars.scss';
 import './tabs.scss';
 
 declare module 'react' {
