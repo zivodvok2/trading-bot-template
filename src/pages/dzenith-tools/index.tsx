@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
-import './styles.scss';
-import CopyTrading from './copy-trading';
 import AutoTrader from './auto-trader/auto-trader';
+import CopyTrading from './copy-trading';
 import FreeBots from './free-bots';
-import { LiveMarketProvider, LiveStatus, LiveTape, LiveAnalysis, MarketSelector, LiveDigits } from './live-market';
+import {
+    LiveAnalysis,
+    LiveDigits,
+    LiveMarketProvider,
+    LiveStatus,
+    LiveTape,
+    MarketSelector,
+    PriceLineChart,
+    useLiveMarket,
+} from './live-market';
+import './styles.scss';
 
 type Variant =
     | 'market_analysis'
@@ -166,6 +175,7 @@ function Manual() {
 function Accumulators() {
     const [rate, setRate] = useState('3');
     const [stake, setStake] = useState('2');
+    const feed = useLiveMarket();
     return (
         <div className='dz-stack'>
             <Panel title='Accumulator configurator'>
@@ -198,6 +208,11 @@ function Accumulators() {
                     </small>
                     <button className='dz-primary'>Prepare accumulator demo</button>
                 </div>
+                <p className='dz-muted-copy'>
+                    Recent price range — an accumulator pays out while the market stays inside its range; wider recent
+                    swings mean a higher chance of an early knock-out at a given growth rate.
+                </p>
+                <PriceLineChart ticks={feed.ticks} precision={feed.precision} />
             </Panel>
             <Panel title='Supported behavior'>
                 <p className='dz-muted-copy'>
