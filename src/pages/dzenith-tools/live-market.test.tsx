@@ -1,13 +1,16 @@
 import React from 'react';
-import { act, render, renderHook, screen } from '@testing-library/react';
+import { act, fireEvent, render, renderHook, screen } from '@testing-library/react';
 import {
     appendTick,
+    DigitBarChart,
     digitOf,
-    statistics,
-    useTickFeed,
+    LiveAnalysis,
     LiveMarketProvider,
     LiveTape,
-    LiveAnalysis,
+    PriceLineChart,
+    RiseFallBars,
+    statistics,
+    useTickFeed,
 } from './live-market';
 
 class MockSocket {
@@ -115,4 +118,92 @@ test('renders changing quotes and recalculated observations from socket messages
     expect(screen.getByTestId('live-quote').textContent).toBe('10.07');
     expect(screen.getByText('Even: 75.0% observed')).toBeTruthy();
     unmount();
+});
+
+describe('PriceLineChart', () => {
+    test('shows a placeholder with fewer than two points', () => {
+        render(<PriceLineChart ticks={[{ quote: 1, epoch: 1 }]} precision={2} />);
+        expect(screen.getByText('Waiting for enough ticks to draw a chart…')).toBeTruthy();
+    });
+    test('renders the latest price and min/max axis labels', () => {
+        const ticks = [
+            { quote: 9.95, epoch: 1 },
+            { quote: 10.05, epoch: 2 },
+            { quote: 10.0, epoch: 3 },
+        ];
+        render(<PriceLineChart ticks={ticks} precision={2} />);
+        expect(screen.getByText('10.05')).toBeTruthy(); // max
+        expect(screen.getByText('9.95')).toBeTruthy(); // min
+        expect(screen.getByText('10.00')).toBeTruthy(); // latest, in the heading
+    });
+    test('shows a tooltip for the nearest point on hover', () => {
+        const ticks = [
+            { quote: 10.0, epoch: 1 },
+            { quote: 10.1, epoch: 2 },
+        ];
+        const { container } = render(<PriceLineChart ticks={ticks} precision={2} />);
+        const svg = container.querySelector('svg')!;
+        jest.spyOn(svg, 'getBoundingClientRect').mockReturnValue({
+            left: 0,
+            width: 600,
+            top: 0,
+            height: 140,
+            right: 600,
+            bottom: 140,
+            x: 0,
+            y: 0,
+            toJSON: () => '',
+        });
+        // jsdom has no PointerEvent constructor, so RTL's fireEvent.pointerMove can't
+        // carry clientX; dispatch a plain MouseEvent under the 'pointermove' type
+        // instead, which React's event delegation still routes to onPointerMove.
+        fireEvent(svg, new MouseEvent('pointermove', { clientX: 599, bubbles: true }));
+        expect(screen.getByText('00:00:02 UTC')).toBeTruthy();
+        // React implements onPointerLeave via the non-bubbling 'pointerout' event
+        // internally, not a literal 'pointerleave' listener.
+        fireEvent.pointerOut(svg);
+        expect(screen.queryByText('00:00:02 UTC')).toBeNull();
+    });
+});
+
+describe('DigitBarChart', () => {
+    test('shows a placeholder before precision/data is known', () => {
+        render(<DigitBarChart digits={Array(10).fill(0)} n={0} digitReady={false} />);
+        expect(screen.getByText('Waiting for market precision/data…')).toBeTruthy();
+    });
+    test('renders bars with percentages and a tooltip on hover', () => {
+        const digits = [0, 0, 4, 0, 0, 0, 0, 0, 0, 0];
+        render(<DigitBarChart digits={digits} n={4} digitReady />);
+        expect(screen.getByText('100.0%')).toBeTruthy();
+        fireEvent.pointerEnter(screen.getByText('2').closest('.dz-digit-bar-col')!);
+        expect(screen.getByText('4 of 4 ticks (100.0%)')).toBeTruthy();
+    });
+});
+
+describe('RiseFallBars', () => {
+    test('shows a placeholder with no price changes yet', () => {
+        render(<RiseFallBars rise={0} fall={0} flat={0} denominator={0} />);
+        expect(screen.getByText('Waiting for enough price changes…')).toBeTruthy();
+    });
+    test('renders rise/fall percentages, flat note, and a tooltip on hover', () => {
+        render(<RiseFallBars rise={3} fall={1} flat={2} denominator={4} />);
+        expect(screen.getByText('75.0%')).toBeTruthy();
+        expect(screen.getByText('25.0%')).toBeTruthy();
+        expect(screen.getByText('2 unchanged ticks excluded from the ratio.')).toBeTruthy();
+        fireEvent.pointerEnter(screen.getByText('Rise').closest('.dz-hbar-row')!);
+        expect(screen.getByText('3 of 4 price changes')).toBeTruthy();
+    });
+});
+
+test('switches between digit and rise/fall charts with the analysis mode', () => {
+    render(
+        <LiveMarketProvider>
+            <LiveAnalysis />
+        </LiveMarketProvider>
+    );
+    const socket = MockSocket.instances[0];
+    act(() => socket.message({ msg_type: 'history', pip_size: 2, history: { prices: [10.02, 10.04], times: [1, 2] } }));
+    expect(screen.getByText('Live digit distribution')).toBeTruthy();
+    fireEvent.change(screen.getByLabelText('Analysis mode'), { target: { value: 'Rise / Fall' } });
+    expect(screen.getByText('Rise vs fall')).toBeTruthy();
 });

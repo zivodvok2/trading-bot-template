@@ -264,6 +264,202 @@ export function LiveTape() {
         </section>
     );
 }
+// Colors below are pinned to specific validated hexes (not the raw brand teal/green,
+// which read as too light on this dark surface) — see scripts/validate_palette.js in
+// the dataviz skill. Each pair passes lightness-band, CVD-separation and contrast
+// checks against the app's #0b1020 surface.
+const EVEN_COLOR = '#0ea89a';
+const ODD_COLOR = '#6d5ef5';
+const RISE_COLOR = '#0e9463';
+const FALL_COLOR = '#ef4444';
+const PRICE_COLOR = '#12c7b0';
+
+export function PriceLineChart({ ticks, precision }: { ticks: Tick[]; precision: number | null }) {
+    const points = ticks.slice(-60);
+    const [active, setActive] = useState<number | null>(null);
+    if (points.length < 2) {
+        return (
+            <div className='dz-chart dz-chart--empty'>Waiting for enough ticks to draw a chart…</div>
+        );
+    }
+    const quotes = points.map(t => t.quote);
+    const min = Math.min(...quotes);
+    const max = Math.max(...quotes);
+    const range = max - min || 1;
+    const width = 600;
+    const height = 140;
+    const padY = 16;
+    const toX = (i: number) => (i / (points.length - 1)) * width;
+    const toY = (q: number) => height - padY - ((q - min) / range) * (height - padY * 2);
+    const path = points
+        .map((t, i) => `${i === 0 ? 'M' : 'L'} ${toX(i).toFixed(2)} ${toY(t.quote).toFixed(2)}`)
+        .join(' ');
+    const latest = points[points.length - 1];
+    const hovered = active !== null ? points[active] : null;
+    const fmt = (q: number) => (precision === null ? String(q) : q.toFixed(precision));
+    const handleMove = (event: React.PointerEvent<SVGSVGElement>) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        if (!rect.width) return;
+        const ratio = (event.clientX - rect.left) / rect.width;
+        const index = Math.round(ratio * (points.length - 1));
+        setActive(Math.min(points.length - 1, Math.max(0, index)));
+    };
+    return (
+        <div className='dz-chart dz-chart--line'>
+            <div className='dz-chart-heading'>
+                <span>Price · last {points.length} ticks</span>
+                <b>{fmt(latest.quote)}</b>
+            </div>
+            <div className='dz-chart-svg-wrap'>
+                <svg
+                    viewBox={`0 0 ${width} ${height}`}
+                    preserveAspectRatio='none'
+                    role='img'
+                    aria-label={`Line chart of the last ${points.length} tick quotes, latest ${fmt(latest.quote)}`}
+                    onPointerMove={handleMove}
+                    onPointerLeave={() => setActive(null)}
+                >
+                    <line x1={0} y1={height - padY} x2={width} y2={height - padY} className='dz-chart-baseline' />
+                    {active !== null && (
+                        <line x1={toX(active)} y1={0} x2={toX(active)} y2={height} className='dz-chart-crosshair' />
+                    )}
+                    <path d={path} className='dz-chart-line-path' style={{ stroke: PRICE_COLOR }} />
+                    <circle
+                        cx={toX(points.length - 1)}
+                        cy={toY(latest.quote)}
+                        r={4}
+                        className='dz-chart-end-dot'
+                        style={{ fill: PRICE_COLOR }}
+                    />
+                </svg>
+                {hovered && (
+                    <div className='dz-chart-tooltip' style={{ left: `${(active! / (points.length - 1)) * 100}%` }}>
+                        <b>{fmt(hovered.quote)}</b>
+                        <span>{new Date(hovered.epoch * 1000).toISOString().slice(11, 19)} UTC</span>
+                    </div>
+                )}
+            </div>
+            <div className='dz-chart-axis'>
+                <span>{fmt(min)}</span>
+                <span>{fmt(max)}</span>
+            </div>
+        </div>
+    );
+}
+
+export function DigitBarChart({ digits, n, digitReady }: { digits: number[]; n: number; digitReady: boolean }) {
+    const [active, setActive] = useState<number | null>(null);
+    if (!digitReady || !n) {
+        return <div className='dz-chart dz-chart--empty'>Waiting for market precision/data…</div>;
+    }
+    const max = Math.max(...digits, 1);
+    return (
+        <div className='dz-chart dz-chart--bars'>
+            <div className='dz-chart-legend'>
+                <span className='dz-legend-swatch' style={{ background: EVEN_COLOR }} />
+                Even
+                <span className='dz-legend-swatch' style={{ background: ODD_COLOR }} />
+                Odd
+            </div>
+            <div className='dz-digit-bars' role='img' aria-label='Bar chart of last-digit frequency, digits 0 through 9'>
+                {digits.map((count, digit) => {
+                    const pct = (count / n) * 100;
+                    const heightPct = (count / max) * 100;
+                    const isEven = digit % 2 === 0;
+                    return (
+                        <div
+                            className='dz-digit-bar-col'
+                            key={digit}
+                            tabIndex={0}
+                            onPointerEnter={() => setActive(digit)}
+                            onPointerLeave={() => setActive(null)}
+                            onFocus={() => setActive(digit)}
+                            onBlur={() => setActive(null)}
+                        >
+                            <b>{pct.toFixed(1)}%</b>
+                            <div className='dz-digit-bar-track'>
+                                <div
+                                    className='dz-digit-bar-fill'
+                                    style={{ height: `${heightPct}%`, background: isEven ? EVEN_COLOR : ODD_COLOR }}
+                                />
+                            </div>
+                            <small>{digit}</small>
+                            {active === digit && (
+                                <div className='dz-chart-tooltip dz-chart-tooltip--bar'>
+                                    <b>Digit {digit}</b>
+                                    <span>
+                                        {count} of {n} ticks ({pct.toFixed(1)}%)
+                                    </span>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+        </div>
+    );
+}
+
+export function RiseFallBars({
+    rise,
+    fall,
+    flat,
+    denominator,
+}: {
+    rise: number;
+    fall: number;
+    flat: number;
+    denominator: number;
+}) {
+    const [active, setActive] = useState<'rise' | 'fall' | null>(null);
+    if (!denominator) {
+        return <div className='dz-chart dz-chart--empty'>Waiting for enough price changes…</div>;
+    }
+    const rows: { key: 'rise' | 'fall'; label: string; count: number; pct: number; color: string }[] = [
+        { key: 'rise', label: 'Rise', count: rise, pct: (rise / denominator) * 100, color: RISE_COLOR },
+        { key: 'fall', label: 'Fall', count: fall, pct: (fall / denominator) * 100, color: FALL_COLOR },
+    ];
+    return (
+        <div className='dz-chart dz-chart--hbars'>
+            <div className='dz-chart-legend'>
+                <span className='dz-legend-swatch' style={{ background: RISE_COLOR }} />
+                Rise
+                <span className='dz-legend-swatch' style={{ background: FALL_COLOR }} />
+                Fall
+            </div>
+            {rows.map(row => (
+                <div
+                    className='dz-hbar-row'
+                    key={row.key}
+                    tabIndex={0}
+                    onPointerEnter={() => setActive(row.key)}
+                    onPointerLeave={() => setActive(null)}
+                    onFocus={() => setActive(row.key)}
+                    onBlur={() => setActive(null)}
+                >
+                    <small>{row.label}</small>
+                    <div className='dz-hbar-track'>
+                        <div className='dz-hbar-fill' style={{ width: `${row.pct}%`, background: row.color }} />
+                    </div>
+                    <b>{row.pct.toFixed(1)}%</b>
+                    {active === row.key && (
+                        <div className='dz-chart-tooltip dz-chart-tooltip--hbar'>
+                            <span>
+                                {row.count} of {denominator} price changes
+                            </span>
+                        </div>
+                    )}
+                </div>
+            ))}
+            {flat > 0 && (
+                <p className='dz-muted-copy'>
+                    {flat} unchanged tick{flat === 1 ? '' : 's'} excluded from the ratio.
+                </p>
+            )}
+        </div>
+    );
+}
+
 export function LiveAnalysis({ tool = false }: { tool?: boolean }) {
     const feed = useLiveMarket();
     const [mode, setMode] = useState('Even / Odd');
@@ -356,17 +552,16 @@ export function LiveAnalysis({ tool = false }: { tool?: boolean }) {
                 </div>
             </section>
             <section className='dz-panel dz-work-panel'>
-                <div className='dz-panel-heading'>Live digit distribution</div>
-                <div className='dz-digit-grid'>
-                    {stats.digits.map((count, digit) => (
-                        <div className='dz-digit-cell' key={digit}>
-                            <b>{digit}</b>
-                            <span>{n && digitReady ? ((count / n) * 100).toFixed(1) + '%' : '—'}</span>
-                            <i style={{ height: n && digitReady ? `${(count / n) * 160}px` : 0 }} />
-                            <small>{count} ticks</small>
-                        </div>
-                    ))}
-                </div>
+                <div className='dz-panel-heading'>Price movement</div>
+                <PriceLineChart ticks={feed.ticks} precision={feed.precision} />
+            </section>
+            <section className='dz-panel dz-work-panel'>
+                <div className='dz-panel-heading'>{direction ? 'Rise vs fall' : 'Live digit distribution'}</div>
+                {direction ? (
+                    <RiseFallBars rise={stats.rise} fall={stats.fall} flat={stats.flat} denominator={denominator} />
+                ) : (
+                    <DigitBarChart digits={stats.digits} n={n} digitReady={digitReady} />
+                )}
                 <p className='dz-muted-copy'>
                     These are historical frequencies, not probabilities of the next tick or buy/sell recommendations. A
                     more frequent outcome may be expected by the contract structure, not a trading advantage. No orders
