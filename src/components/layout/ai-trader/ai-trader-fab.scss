@@ -1,0 +1,207 @@
+.dz-ai-trader {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+}
+
+.dz-ai-trader__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dz-ai-trader-fab__gear {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(174, 185, 208, 0.24);
+    background: #111d30;
+    color: #aeb9d0;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.dz-ai-trader-fab {
+    display: flex;
+    align-items: center;
+    height: 52px;
+    padding: 0;
+    border: 1px solid rgba(174, 185, 208, 0.24);
+    border-radius: 999px;
+    background: linear-gradient(135deg, #12c7b0, #6d5ef5);
+    color: #07131b;
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35);
+    overflow: hidden;
+    max-width: 52px;
+    transition:
+        max-width 0.25s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.dz-ai-trader-fab:hover,
+.dz-ai-trader-fab:focus-visible {
+    max-width: 220px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+}
+
+.dz-ai-trader-fab:disabled {
+    cursor: wait;
+    opacity: 0.75;
+}
+
+.dz-ai-trader-fab--armed {
+    max-width: 220px;
+    background: linear-gradient(135deg, #ef4444, #f59e0b);
+    animation: dz-ai-trader-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dz-ai-trader-pulse {
+    0%,
+    100% {
+        box-shadow: 0 14px 34px rgba(239, 68, 68, 0.35);
+    }
+    50% {
+        box-shadow: 0 14px 34px rgba(239, 68, 68, 0.75);
+    }
+}
+
+.dz-ai-trader-fab__icon {
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.dz-ai-trader-fab__label {
+    white-space: nowrap;
+    padding-right: 20px;
+    font-size: 14px;
+}
+
+.dz-ai-trader__popover {
+    width: 280px;
+    max-width: calc(100vw - 40px);
+    padding: 16px;
+    border-radius: 14px;
+    background: #111d30;
+    border: 1px solid rgba(174, 185, 208, 0.24);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    color: #f8fafc;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dz-ai-trader__confirm b {
+    color: #ef4444;
+    display: block;
+    margin-bottom: 6px;
+}
+
+.dz-ai-trader__confirm p {
+    color: #aeb9d0;
+    margin: 0 0 10px;
+    line-height: 1.5;
+}
+
+.dz-ai-trader__actions {
+    display: flex;
+    gap: 8px;
+}
+
+.dz-ai-trader__actions button {
+    flex: 1;
+}
+
+.dz-ai-trader__stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    text-align: center;
+}
+
+.dz-ai-trader__stats small {
+    display: block;
+    color: #8491aa;
+    font-size: 10px;
+}
+
+.dz-ai-trader__stats b {
+    font-variant-numeric: tabular-nums;
+}
+
+.dz-ai-trader__pending {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    background: rgba(245, 158, 11, 0.1);
+    border-left: 3px solid #f59e0b;
+    color: #f5c97b;
+}
+
+.dz-ai-trader__status {
+    margin: 0;
+    color: #aeb9d0;
+}
+
+.dz-ai-trader__settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(174, 185, 208, 0.16);
+}
+
+.dz-ai-trader__settings label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #aeb9d0;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.dz-ai-trader__settings select,
+.dz-ai-trader__settings input {
+    font: inherit;
+    color: #fff;
+    background: #0b1020;
+    border: 1px solid #2b3a5d;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.dz-ai-trader__hint {
+    margin: 0;
+    color: #8491aa;
+    font-size: 11px;
+}
+
+@media (max-width: 700px) {
+    .dz-ai-trader {
+        right: 14px;
+        bottom: max(14px, env(safe-area-inset-bottom));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dz-ai-trader-fab {
+        transition: none;
+        animation: none;
+    }
+}
