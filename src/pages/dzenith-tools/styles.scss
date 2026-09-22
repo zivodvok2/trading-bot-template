@@ -19,3 +19,20 @@
 .dz-tool-page{width:calc(100vw - 3.2rem)!important;max-width:none!important;margin-left:0!important;margin-right:0!important;overflow-x:hidden}
 .dz-page-heading,.dz-stack{margin-left:auto!important;margin-right:auto!important}
 @media(max-width:768px){.dz-tool-page{width:100vw!important}}
+
+/* Let the Competition leaderboard shrink to fit small viewports instead of
+   relying on a silent horizontal scroll with no visual hint that "Net
+   profit" and "Source" are cut off. */
+@media (max-width: 480px) {
+    .dz-table {
+        min-width: 0;
+    }
+    .dz-table th,
+    .dz-table td {
+        padding: 10px 6px;
+        font-size: 12px;
+    }
+    .dz-table th {
+        font-size: 9px;
+    }
+}
